@@ -1,0 +1,20 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    uses: betabitplus/ternforge-infra-ci/.github/workflows/release.yml@28a4d7dbe8ceedbaf462448a950f28584347d759 # v1.6.1
+    with:
+      app-client-id: ${{ vars.TERNFORGE_RELEASE_CLIENT_ID }}
+      repository: ${{ github.event.repository.name }}
+      release-type: python
+      synchronize-python-lock: true
+    secrets:
+      app-private-key: ${{ secrets.TERNFORGE_RELEASE_PRIVATE_KEY }}

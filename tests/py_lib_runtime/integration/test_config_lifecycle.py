@@ -178,4 +178,6 @@ def test_runtime_config_rejects_invalid_values() -> None:
         TypeError,
         match=r"PyLibRuntimeConfig\.logging_quiet_module_names",
     ):
-        PyLibRuntimeConfig(logging_quiet_module_names=["httpx"])  # type: ignore[arg-type]
+        PyLibRuntimeConfig(
+            logging_quiet_module_names=["httpx"],  # type: ignore[arg-type]
+        )

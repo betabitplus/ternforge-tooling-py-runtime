@@ -36,23 +36,52 @@ urls.Repository = "https://github.com/betabitplus/ternforge-tooling-py-runtime"
 # ==============================================================================
 [dependency-groups]
 dev = [
+  "bandit>=1.9.4",
+  "build>=1.5.0",
+  "check-manifest>=0.51",
+  "check-wheel-contents>=0.6.1",
   "commitizen>=4.16.3",
+  "deptry>=0.25.1",
   "diskcache>=5.6",
+  "flake8>=7.3",
+  "flake8-class-attributes-order>=0.3",
+  "flake8-cognitive-complexity>=0.1",
   "hypothesis>=6.152.4",
   "import-linter>=2.11",
+  "interrogate>=1.7",
   "ipykernel>=7.2.0",
+  "ipython>=9.14.1",
+  "nest-asyncio>=1.6",
+  "pillow>=12.2",
+  "pip-audit>=2.10.1",
+  "pre-commit>=4.6.0",
   "pyright>=1.1.408",
   "pytest>=9.1.0",
+  "pytest-cov>=7.1.0",
+  "pytest-randomly>=4.1.0",
+  "pytest-recording>=0.13.4",
+  "pytest-xdist>=3.8.0",
+  "radon>=6.0.1",
+  "rich>=15",
   "ruff>=0.15.15",
+  "syrupy>=5.3.2",
+  "twine>=6.2.0",
+  "ty>=0.0.50",
+  "types-pillow>=10.2.0.20240822",
+  "wheel>=0.47.0",
 ]
 
 # ==============================================================================
 # Setuptools Configuration
 # ==============================================================================
 [tool.setuptools]
-package-dir."" = "src"
 packages.find.where = [ "src" ]
 packages.find.include = [ "py_lib_runtime*" ]
+package-dir."" = "src"
+
+# ---------------- Import-linter architecture contracts ----------------
+[tool.uv]
+required-version = "==0.12.0"
 
 # ==============================================================================
 # Python Quality Tooling
@@ -115,7 +144,81 @@ lint.isort.combine-as-imports = true
 lint.isort.known-first-party = [ "py_lib_runtime" ]
 lint.pydocstyle.convention = "google"
 
+[tool.interrogate]
+fail-under = 100
+# Require docstrings in production code.
+ignore-init-method = false
+ignore-init-module = false
+ignore-magic = false
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = false
+ignore-nested-functions = false
+ignore-nested-classes = false
+ignore-setters = false
+ignore-overloaded-functions = true
+ignore-regex = [ "^wrapper$" ]
+exclude = [ ".agents", ".artifact-smoke*", "docs", "scripts", "tests" ]
+color = true
+verbose = 1
+quiet = false
+omit-covered-files = true
+
+# ---------------- Manifest validation ----------------
+[tool.check-manifest]
+ignore = [
+  "*.egg-info/**",
+  ".agents/**",
+  ".copier-answers.yml",
+  ".devcontainer/**",
+  ".git/**",
+  ".github/**",
+  ".gitleaks.toml",
+  ".markdown-link-check.json",
+  ".markdownlint.yaml",
+  ".mdformat.toml",
+  ".pre-commit-config.yaml",
+  ".pytest_cache/**",
+  ".release-please-manifest.json",
+  ".ruff_cache/**",
+  ".venv/**",
+  ".vscode/**",
+  "__pycache__/**",
+  "docs/**",
+  "examples/**",
+  "plan/**",
+  "release-please-config.json",
+  "scripts/**",
+  "SETUP.md",
+  "tests/**",
+  "typos.toml",
+  "uv.lock",
+  "workbench/**",
+]
+
+# ---------------- Deptry (dependency hygiene) ----------------
+[tool.deptry]
+extend_exclude = [
+  ".agents",
+  ".artifact-smoke*",
+  ".venv",
+  "examples",
+  "scripts",
+  "tests",
+  "workbench",
+]
+known_first_party = [ "py_lib_runtime" ]
+
+# ---------------- Bandit (security) ----------------
+[tool.bandit]
+exclude_dirs = [ ".agents", ".venv", "scripts", "tests" ]
+
 [tool.pyright]
+pythonVersion = "3.13"
+venv = ".venv"
+venvPath = "."
+typeCheckingMode = "strict"
 exclude = [
   "**/__pycache__",
   ".agents",
@@ -124,8 +227,6 @@ exclude = [
   ".ruff_cache",
   ".venv",
 ]
-executionEnvironments = [ { root = "." } ]
-pythonVersion = "3.13"
 reportArgumentType = false
 reportAttributeAccessIssue = false
 reportMissingTypeStubs = false
@@ -135,20 +236,64 @@ reportUnknownLambdaType = false
 reportUnknownMemberType = false
 reportUnknownParameterType = false
 reportUnknownVariableType = false
-typeCheckingMode = "strict"
-venv = ".venv"
-venvPath = "."
+executionEnvironments = [ { root = "." } ]
+
+# ---------------- Pyright configuration ----------------
+[tool.ty]
+# Exclude patterns matching Pyright configuration.
+src.exclude = [
+  "**/__pycache__/",
+  "*.egg-info/",
+  ".agents/",
+  ".artifact-smoke*/",
+  ".devcontainer/",
+  ".git/",
+  ".github/",
+  ".pytest_cache/",
+  ".ruff_cache/",
+  ".venv/",
+  ".vscode/",
+  "scripts/",
+  "tests/",
+]
+# ---------------- ty (Astral type checker) ----------------
+environment.python-version = "3.13"
+# Suppress rules that generate false positives or conflict with Pyright settings.
+rules.invalid-argument-type = "ignore"
+rules.invalid-assignment = "ignore"
+rules.invalid-return-type = "ignore"
+rules.possibly-missing-attribute = "ignore"
+rules.unknown-argument = "ignore"
+rules.unresolved-attribute = "ignore"
 
 [tool.pytest]
+ini_options.pythonpath = [ "src" ]
 ini_options.addopts = "-q"
 ini_options.markers = [
-  "e2e_contract: end-to-end public contract tests",
   "e2e_behavior: end-to-end behavior tests",
+  "e2e_contract: end-to-end public contract tests",
   "hermetic: marks tests that run fully offline",
-  "vcr: marks tests that use VCR.py for HTTP recording/replay",
   "slow: marks tests that are slow and should be skipped in fast runs",
+  "vcr: marks tests that use VCR.py for HTTP recording/replay",
 ]
-ini_options.pythonpath = [ "src" ]
+
+[tool.coverage]
+run.source = [ "src" ]
+# ---------------- pytest coverage ----------------
+report.fail_under = 1
+
+# ==============================================================================
+# Shared py-lib Tooling Manifest
+# ==============================================================================
+[tool.commitizen]
+name = "cz_conventional_commits"
+allowed_prefixes = [ "Merge", "Revert", "WIP" ]
+version_provider = "pep621"
+version_files = [ "src/py_lib_runtime/__init__.py:__version__" ]
+major_version_zero = true
+tag_format = "py-lib-runtime-v$version"
+annotated_tag = true
+update_changelog_on_bump = false
 
 # ==============================================================================
 # Import Linter Architecture Contracts
@@ -234,24 +379,15 @@ source_modules = [ "py_lib_runtime" ]
 forbidden_modules = [ "examples" ]
 allow_indirect_imports = true
 
-# ==============================================================================
-# Shared py-lib Tooling Manifest
-# ==============================================================================
-[tool.py_lib_starter]
+# ---------------- Commitizen (conventional commits + changelog) ----------------
+[tool.pip-audit]
+# Ignore vulnerabilities that are not applicable or have no fix yet.
+ignore-vulns = []
+
+[tool.ternforge]
 primary_package = "py_lib_runtime"
 package_names = [ "py_lib_runtime" ]
 library_lane = "standard-lib"
 env_prefix = "PY_LIB_RUNTIME"
-
-# ==============================================================================
-# Release Automation
-# ==============================================================================
-[tool.commitizen]
-name = "cz_conventional_commits"
-version_provider = "pep621"
-version_files = [ "src/py_lib_runtime/__init__.py:__version__" ]
-tag_format = "py-lib-runtime-v$version"
-update_changelog_on_bump = false
-major_version_zero = true
-annotated_tag = true
-allowed_prefixes = [ "Merge", "Revert", "WIP" ]
+secrets.env_files = []
+# ---------------- Pip Audit (dependency vulnerability scanning) ----------------

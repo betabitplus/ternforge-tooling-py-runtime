@@ -1,0 +1,32 @@
+_commit: v1.2.3
+_src_path: https://github.com/betabitplus/ternforge-template-py-library.git
+author_email: 8123085+betabitplus@users.noreply.github.com
+author_name: betabitplus
+ci_playwright_browsers: []
+ci_policy_command: ''
+config_class_name: PyLibRuntimeConfig
+copyright_year: '2026'
+e2e_slices:
+-   name: public-boundary
+    path: tests/__PACKAGE_NAME__/e2e/public_boundary
+env_prefix: PY_LIB_RUNTIME
+error_class_name: PyLibRuntimeError
+github_owner: betabitplus
+gitignore_extra_patterns: []
+initial_version: 1.0.0
+library_lane: standard-lib
+package_name: py_lib_runtime
+pip_audit_waivers: []
+preserve_pyproject_on_update: true
+project_description: Shared runtime support helpers for Python libraries.
+project_name: py-lib-runtime
+project_slug: py-lib-runtime
+project_title: Py Lib Runtime
+project_title_lower: py lib runtime
+renovate_uv_ignored_updates: []
+repository_name: ternforge-tooling-py-runtime
+runtime_audit_exclude_package: ''
+workspace_python_paths:
+- src
+workspace_test_paths:
+- tests

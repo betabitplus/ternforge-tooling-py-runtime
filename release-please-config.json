@@ -6,7 +6,7 @@
   "changelog-path": "CHANGELOG.md",
   "packages": {
     ".": {
-      "component": "ternforge-tooling-py-runtime",
+      "component": "py-lib-runtime",
       "release-type": "simple",
       "extra-files": [
         {

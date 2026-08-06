@@ -1,7 +1,7 @@
 {
   "ignorePatterns": [
     {
-      "pattern": "^https://github.com/betabitplus/py-lib-starter"
+      "pattern": "^https://github.com/betabitplus/ternforge-tooling-py-runtime"
     }
   ],
   "replacementPatterns": []
