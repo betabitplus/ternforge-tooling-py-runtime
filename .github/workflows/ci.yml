@@ -1,4 +1,4 @@
-name: ci
+name: CI
 
 on:
   pull_request:
@@ -11,39 +11,10 @@ permissions:
   pull-requests: read
 
 jobs:
-  required:
-    name: ci / required
-    runs-on: ubuntu-latest
-    steps:
-      - name: Validate pull request title
-        if: github.event_name == 'pull_request'
-        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          types: |
-            build
-            chore
-            ci
-            docs
-            feat
-            fix
-            perf
-            refactor
-            revert
-            test
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-        with:
-          version: "0.12.0"
-          enable-cache: false
-      - name: Verify standalone package
-        run: |
-          set -euo pipefail
-          uv sync --locked --all-groups --python 3.13
-          uv run --no-sync pytest
-          rm -rf build dist
-          uv build
-          python -m pip install --quiet --disable-pip-version-check dist/*.whl
+  ci:
+    name: ci
+    uses: betabitplus/ternforge-infra-ci/.github/workflows/python-library.yml@5ae3d760d3daae67c97d058e73c203d5acf6f4b9 # v1.6.0
+    with:
+      python-version: "3.13"
+      policy-command: ""
+      runtime-audit-exclude-package: ""

@@ -86,6 +86,193 @@ class BaseCacheManager[T](ABC):
             cache_dir=str(self._cache_dir),
         )
 
+    def delete(self, key: str, params: Mapping[str, Any] | None = None) -> bool:
+        """Remove a cached entry for a key."""
+        if self._cache is None:
+            return False
+
+        storage_key = self._storage_key(key, params)
+        return bool(self._cache.delete(storage_key))
+
+    def get(self, key: str, params: Mapping[str, Any] | None = None) -> T | None:
+        """Retrieve a cached entry for a key."""
+        if self._cache is None:
+            return None
+
+        storage_key = self._storage_key(key, params)
+        data = self._cache.get(storage_key)
+
+        if data is None:
+            self._cache_stats["misses"] += 1
+            return None
+
+        if not isinstance(data, dict):
+            self._cache_stats["hits"] += 1
+            return cast("T", data)
+
+        self._cache_stats["hits"] += 1
+        payload = cast("_CachePayload", data)
+        return self._deserialize_entry(self._restore_from_storage(payload), key)
+
+    def set(
+        self,
+        key: str,
+        entry: T,
+        params: Mapping[str, Any] | None = None,
+    ) -> None:
+        """Store an entry in the cache."""
+        if self._cache is None:
+            return
+
+        storage_key = self._storage_key(key, params)
+        data = self._serialize_entry(entry)
+
+        if "timestamp" not in data or data["timestamp"] is None:
+            data["timestamp"] = datetime.now(UTC).isoformat()
+
+        self._cache.set(
+            storage_key,
+            self._prepare_for_storage(data),
+            expire=self._ttl_seconds,
+        )
+        logger.debug(
+            "Cached entry stored",
+            event_type="py_lib_runtime.cache.entry.stored",
+            key_preview=preview_value(key),
+        )
+
+    def get_or_set(
+        self,
+        key: str,
+        factory: Callable[[], T],
+        params: Mapping[str, Any] | None = None,
+        *,
+        is_valid: Callable[[T], bool] | None = None,
+    ) -> tuple[T, bool]:
+        """Atomically get a cached entry or compute and store it."""
+        if self._cache is None:
+            return factory(), False
+
+        storage_key = self._storage_key(key, params)
+
+        entry, hit = self._get_cached_entry(storage_key, key, is_valid)
+        if hit:
+            self._cache_stats["hits"] += 1
+            return cast("T", entry), True
+
+        with self._lock(storage_key):
+            entry, hit = self._get_cached_entry(storage_key, key, is_valid)
+            if hit:
+                self._cache_stats["hits"] += 1
+                return cast("T", entry), True
+
+            entry = factory()
+            if entry is None:
+                self._cache_stats["misses"] += 1
+                return entry, False
+
+            self.set(key, entry, params)
+            self._cache_stats["misses"] += 1
+            return entry, False
+
+    async def get_or_set_async(
+        self,
+        key: str,
+        factory: Callable[[], Awaitable[T] | T],
+        params: Mapping[str, Any] | None = None,
+        *,
+        is_valid: Callable[[T], bool] | None = None,
+    ) -> tuple[T, bool]:
+        """Async variant of `get_or_set` for async factories."""
+        if self._cache is None:
+            entry = factory()
+            if isawaitable(entry):
+                return cast("T", await entry), False
+            return cast("T", entry), False
+
+        storage_key = self._storage_key(key, params)
+
+        entry, hit = self._get_cached_entry(storage_key, key, is_valid)
+        if hit:
+            self._cache_stats["hits"] += 1
+            return cast("T", entry), True
+
+        lock = await self._acquire_lock_async(storage_key)
+        try:
+            entry, hit = self._get_cached_entry(storage_key, key, is_valid)
+            if hit:
+                self._cache_stats["hits"] += 1
+                return cast("T", entry), True
+
+            entry = factory()
+            if isawaitable(entry):
+                entry = await cast("Awaitable[T]", entry)
+            if entry is None:
+                self._cache_stats["misses"] += 1
+                return cast("T", entry), False
+
+            self.set(key, cast("T", entry), params)
+            self._cache_stats["misses"] += 1
+            return cast("T", entry), False
+        finally:
+            await asyncio.to_thread(lock.release)
+
+    def has(self, key: str, params: Mapping[str, Any] | None = None) -> bool:
+        """Return whether a key has a cached entry."""
+        if self._cache is None:
+            return False
+
+        storage_key = self._storage_key(key, params)
+        return storage_key in self._cache
+
+    def clear(self) -> None:
+        """Clear all cached entries."""
+        if self._cache is not None:
+            self._cache.clear()
+            logger.info(
+                "Cache cleared",
+                event_type="py_lib_runtime.cache.lifecycle.cleared",
+            )
+
+    def stats(self) -> CacheStats:
+        """Return cache statistics."""
+        stats = CacheStats(
+            enabled=self._cache is not None,
+            directory=str(self._cache_dir),
+            size_bytes=0,
+            entry_count=0,
+            cache_hits=self._cache_stats["hits"],
+            cache_misses=self._cache_stats["misses"],
+            ttl_enabled=self._ttl_seconds is not None,
+            ttl_seconds=self._ttl_seconds,
+            compression_enabled=self._compression_threshold is not None,
+            compression_threshold_bytes=self._compression_threshold,
+            compressed_entries=self._compression_stats["compressed_entries"],
+            compressed_bytes_in=self._compression_stats["compressed_bytes_in"],
+            compressed_bytes_out=self._compression_stats["compressed_bytes_out"],
+            compression_savings_bytes=(
+                self._compression_stats["compressed_bytes_in"]
+                - self._compression_stats["compressed_bytes_out"]
+            ),
+        )
+        if self._cache is None:
+            return stats
+
+        stats["size_bytes"] = self._cache.volume()
+        stats["entry_count"] = len(self._cache)
+        stats["max_size_bytes"] = self._max_size
+        return stats
+
+    def close(self) -> None:
+        """Close the cache connection."""
+        if self._cache is not None:
+            self._cache.close()
+            self._cache = None
+            logger.debug(
+                "Cache closed",
+                event_type="py_lib_runtime.cache.lifecycle.closed",
+            )
+
     def __enter__(self) -> BaseCacheManager[T]:
         """Context manager entry."""
         return self
@@ -196,53 +383,6 @@ class BaseCacheManager[T](ABC):
         ).encode("utf-8")
         return hashlib.sha256(encoded).hexdigest()
 
-    def get(self, key: str, params: Mapping[str, Any] | None = None) -> T | None:
-        """Retrieve a cached entry for a key."""
-        if self._cache is None:
-            return None
-
-        storage_key = self._storage_key(key, params)
-        data = self._cache.get(storage_key)
-
-        if data is None:
-            self._cache_stats["misses"] += 1
-            return None
-
-        if not isinstance(data, dict):
-            self._cache_stats["hits"] += 1
-            return cast("T", data)
-
-        self._cache_stats["hits"] += 1
-        payload = cast("_CachePayload", data)
-        return self._deserialize_entry(self._restore_from_storage(payload), key)
-
-    def set(
-        self,
-        key: str,
-        entry: T,
-        params: Mapping[str, Any] | None = None,
-    ) -> None:
-        """Store an entry in the cache."""
-        if self._cache is None:
-            return
-
-        storage_key = self._storage_key(key, params)
-        data = self._serialize_entry(entry)
-
-        if "timestamp" not in data or data["timestamp"] is None:
-            data["timestamp"] = datetime.now(UTC).isoformat()
-
-        self._cache.set(
-            storage_key,
-            self._prepare_for_storage(data),
-            expire=self._ttl_seconds,
-        )
-        logger.debug(
-            "Cached entry stored",
-            event_type="py_lib_runtime.cache.entry.stored",
-            key_preview=preview_value(key),
-        )
-
     def _entry_from_data(self, data: object, key: str) -> T:
         """Normalize cached data into an entry instance."""
         if not isinstance(data, dict):
@@ -266,146 +406,6 @@ class BaseCacheManager[T](ABC):
         if is_valid is None or is_valid(entry):
             return entry, True
         return None, False
-
-    def get_or_set(
-        self,
-        key: str,
-        factory: Callable[[], T],
-        params: Mapping[str, Any] | None = None,
-        *,
-        is_valid: Callable[[T], bool] | None = None,
-    ) -> tuple[T, bool]:
-        """Atomically get a cached entry or compute and store it."""
-        if self._cache is None:
-            return factory(), False
-
-        storage_key = self._storage_key(key, params)
-
-        entry, hit = self._get_cached_entry(storage_key, key, is_valid)
-        if hit:
-            self._cache_stats["hits"] += 1
-            return cast("T", entry), True
-
-        with self._lock(storage_key):
-            entry, hit = self._get_cached_entry(storage_key, key, is_valid)
-            if hit:
-                self._cache_stats["hits"] += 1
-                return cast("T", entry), True
-
-            entry = factory()
-            if entry is None:
-                self._cache_stats["misses"] += 1
-                return entry, False
-
-            self.set(key, entry, params)
-            self._cache_stats["misses"] += 1
-            return entry, False
-
-    async def get_or_set_async(
-        self,
-        key: str,
-        factory: Callable[[], Awaitable[T] | T],
-        params: Mapping[str, Any] | None = None,
-        *,
-        is_valid: Callable[[T], bool] | None = None,
-    ) -> tuple[T, bool]:
-        """Async variant of `get_or_set` for async factories."""
-        if self._cache is None:
-            entry = factory()
-            if isawaitable(entry):
-                return cast("T", await entry), False
-            return cast("T", entry), False
-
-        storage_key = self._storage_key(key, params)
-
-        entry, hit = self._get_cached_entry(storage_key, key, is_valid)
-        if hit:
-            self._cache_stats["hits"] += 1
-            return cast("T", entry), True
-
-        lock = await self._acquire_lock_async(storage_key)
-        try:
-            entry, hit = self._get_cached_entry(storage_key, key, is_valid)
-            if hit:
-                self._cache_stats["hits"] += 1
-                return cast("T", entry), True
-
-            entry = factory()
-            if isawaitable(entry):
-                entry = await cast("Awaitable[T]", entry)
-            if entry is None:
-                self._cache_stats["misses"] += 1
-                return cast("T", entry), False
-
-            self.set(key, cast("T", entry), params)
-            self._cache_stats["misses"] += 1
-            return cast("T", entry), False
-        finally:
-            await asyncio.to_thread(lock.release)
-
-    def has(self, key: str, params: Mapping[str, Any] | None = None) -> bool:
-        """Return whether a key has a cached entry."""
-        if self._cache is None:
-            return False
-
-        storage_key = self._storage_key(key, params)
-        return storage_key in self._cache
-
-    def delete(self, key: str, params: Mapping[str, Any] | None = None) -> bool:
-        """Remove a cached entry for a key."""
-        if self._cache is None:
-            return False
-
-        storage_key = self._storage_key(key, params)
-        return bool(self._cache.delete(storage_key))
-
-    def clear(self) -> None:
-        """Clear all cached entries."""
-        if self._cache is not None:
-            self._cache.clear()
-            logger.info(
-                "Cache cleared",
-                event_type="py_lib_runtime.cache.lifecycle.cleared",
-            )
-
-    def stats(self) -> CacheStats:
-        """Return cache statistics."""
-        stats = CacheStats(
-            enabled=self._cache is not None,
-            directory=str(self._cache_dir),
-            size_bytes=0,
-            entry_count=0,
-            cache_hits=self._cache_stats["hits"],
-            cache_misses=self._cache_stats["misses"],
-            ttl_enabled=self._ttl_seconds is not None,
-            ttl_seconds=self._ttl_seconds,
-            compression_enabled=self._compression_threshold is not None,
-            compression_threshold_bytes=self._compression_threshold,
-            compressed_entries=self._compression_stats["compressed_entries"],
-            compressed_bytes_in=self._compression_stats["compressed_bytes_in"],
-            compressed_bytes_out=self._compression_stats["compressed_bytes_out"],
-            compression_savings_bytes=(
-                self._compression_stats["compressed_bytes_in"]
-                - self._compression_stats["compressed_bytes_out"]
-            ),
-        )
-        if self._cache is None:
-            return stats
-
-        stats["size_bytes"] = self._cache.volume()
-        stats["entry_count"] = len(self._cache)
-        stats["max_size_bytes"] = self._max_size
-        return stats
-
-    def close(self) -> None:
-        """Close the cache connection."""
-        if self._cache is not None:
-            self._cache.close()
-            self._cache = None
-            logger.debug(
-                "Cache closed",
-                event_type="py_lib_runtime.cache.lifecycle.closed",
-            )
 
     def _lock(self, key: str) -> _DiskCacheLock:
         """Return a per-key cache lock."""
@@ -459,32 +459,30 @@ def _normalize_key_value(value: object) -> object:
 def _normalize_scalar_key_value(value: object) -> object | None:
     """Return a normalized scalar cache-key value, if supported."""
     if value is None:
-        tag = "none"
-        payload = None
-    elif isinstance(value, bool):
-        tag = "bool"
-        payload = value
-    elif isinstance(value, int):
-        tag = "int"
-        payload = value
-    elif isinstance(value, float):
+        return ["none", None]
+
+    simple_tag = _simple_scalar_tag(value)
+    if simple_tag is not None:
+        return [simple_tag, value]
+
+    if isinstance(value, float):
         if not math.isfinite(value):
             msg = "Cache key values must not contain non-finite floats."
             raise ValueError(msg)
-        tag = "float"
-        payload = value
-    elif isinstance(value, str):
-        tag = "str"
-        payload = value
-    elif isinstance(value, bytes | bytearray | memoryview):
-        tag = "bytes"
-        payload = base64.b64encode(bytes(value)).decode("ascii")
-    elif isinstance(value, Path):
-        tag = "path"
-        payload = str(value)
-    else:
-        return None
-    return [tag, payload]
+        return ["float", value]
+    if isinstance(value, bytes | bytearray | memoryview):
+        return ["bytes", base64.b64encode(bytes(value)).decode("ascii")]
+    if isinstance(value, Path):
+        return ["path", str(value)]
+    return None
+
+
+def _simple_scalar_tag(value: object) -> str | None:
+    """Return the cache-key tag for directly serializable scalar values."""
+    for expected_type, tag in ((bool, "bool"), (int, "int"), (str, "str")):
+        if isinstance(value, expected_type):
+            return tag
+    return None
 
 
 def _normalize_collection_key_value(value: object) -> object:

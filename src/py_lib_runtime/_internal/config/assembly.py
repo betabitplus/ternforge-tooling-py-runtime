@@ -18,7 +18,9 @@ def build_default_config() -> PyLibRuntimeConfig:
         cache_env_var=api_defaults.DEFAULT_CACHE_ENV_VAR,
         cache_max_size_bytes=api_defaults.DEFAULT_CACHE_MAX_SIZE_BYTES,
         logging_default_local_level=api_defaults.DEFAULT_LOGGING_LOCAL_LEVEL,
-        logging_default_third_party_level=api_defaults.DEFAULT_LOGGING_THIRD_PARTY_LEVEL,
+        logging_default_third_party_level=(
+            api_defaults.DEFAULT_LOGGING_THIRD_PARTY_LEVEL
+        ),
         logging_quiet_module_names=api_defaults.DEFAULT_LOGGING_QUIET_MODULE_NAMES,
         logging_retry_scheduled_event_type=(
             api_defaults.DEFAULT_LOGGING_RETRY_SCHEDULED_EVENT_TYPE

@@ -57,13 +57,7 @@ def test_internal_package_imports_only_api_declarations() -> None:
     package_root = Path(py_lib_runtime.__file__).parent
 
     for path in package_root.joinpath("_internal").rglob("*.py"):
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                for alias in node.names:
-                    _assert_allowed_internal_api_import(alias.name, path)
-            if isinstance(node, ast.ImportFrom):
-                _assert_allowed_internal_api_import_from(node, path)
+        _assert_internal_imports_in_file(path)
 
 
 def test_root_import_does_not_require_cache_extra() -> None:
@@ -142,6 +136,17 @@ def _assert_allowed_internal_api_import(module_name: str, path: Path) -> None:
     assert module_name in _ALLOWED_INTERNAL_API_MODULE_IMPORTS, (
         f"{path} imports facade module {module_name!r}"
     )
+
+
+def _assert_internal_imports_in_file(path: Path) -> None:
+    """Assert one private module uses only allowed API declaration imports."""
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                _assert_allowed_internal_api_import(alias.name, path)
+        elif isinstance(node, ast.ImportFrom):
+            _assert_allowed_internal_api_import_from(node, path)
 
 
 def _assert_allowed_internal_api_import_from(
