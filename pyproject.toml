@@ -1,0 +1,257 @@
+# ==============================================================================
+# Build System Configuration
+# ==============================================================================
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools>=82.0.1" ]
+
+# ==============================================================================
+# Project Metadata
+# ==============================================================================
+[project]
+name = "py-lib-runtime"
+version = "1.0.0"
+description = "Shared runtime support helpers for py-lib Python libraries."
+readme = "README.md"
+keywords = [ "cache", "library", "logging", "python", "runtime" ]
+license = "MIT"
+authors = [ { name = "betabitplus", email = "8123085+betabitplus@users.noreply.github.com" } ]
+requires-python = ">=3.13"
+classifiers = [
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Typing :: Typed",
+]
+dependencies = [ "structlog>=25.5" ]
+optional-dependencies.cache = [ "diskcache>=5.6" ]
+urls."Bug Tracker" = "https://github.com/betabitplus/ternforge-tooling-py-runtime/issues"
+urls.Documentation = "https://github.com/betabitplus/ternforge-tooling-py-runtime/tree/main/docs"
+urls.Homepage = "https://github.com/betabitplus/ternforge-tooling-py-runtime"
+urls.Repository = "https://github.com/betabitplus/ternforge-tooling-py-runtime"
+
+# ==============================================================================
+# Development Dependencies
+# ==============================================================================
+[dependency-groups]
+dev = [
+  "commitizen>=4.16.3",
+  "diskcache>=5.6",
+  "hypothesis>=6.152.4",
+  "import-linter>=2.11",
+  "ipykernel>=7.2.0",
+  "pyright>=1.1.408",
+  "pytest>=9.1.0",
+  "ruff>=0.15.15",
+]
+
+# ==============================================================================
+# Setuptools Configuration
+# ==============================================================================
+[tool.setuptools]
+package-dir."" = "src"
+packages.find.where = [ "src" ]
+packages.find.include = [ "py_lib_runtime*" ]
+
+# ==============================================================================
+# Python Quality Tooling
+# ==============================================================================
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+extend-exclude = [ "build" ]
+fix = true
+format.docstring-code-format = true
+lint.select = [
+  "A",
+  "ANN",
+  "ARG",
+  "ASYNC",
+  "B",
+  "C4",
+  "COM",
+  "D",
+  "DTZ",
+  "E",
+  "EM",
+  "F",
+  "I",
+  "ISC",
+  "LOG",
+  "N",
+  "PERF",
+  "PGH",
+  "PIE",
+  "PLC",
+  "PLE",
+  "PLR",
+  "PLW",
+  "PT",
+  "PTH",
+  "RET",
+  "RSE",
+  "RUF",
+  "S",
+  "SIM",
+  "T20",
+  "TC",
+  "TRY",
+  "UP",
+  "W",
+]
+lint.ignore = [
+  "COM812",
+  "ISC001",
+  "PLC0415",
+  "TC001",
+  "TC002",
+  "TC003",
+]
+lint.per-file-ignores."examples/*" = [ "T20" ]
+lint.per-file-ignores."tests/*" = [ "ANN", "D", "S101" ]
+lint.flake8-tidy-imports.ban-relative-imports = "all"
+lint.isort.combine-as-imports = true
+lint.isort.known-first-party = [ "py_lib_runtime" ]
+lint.pydocstyle.convention = "google"
+
+[tool.pyright]
+exclude = [
+  "**/__pycache__",
+  ".agents",
+  ".git",
+  ".pytest_cache",
+  ".ruff_cache",
+  ".venv",
+]
+executionEnvironments = [ { root = "." } ]
+pythonVersion = "3.13"
+reportArgumentType = false
+reportAttributeAccessIssue = false
+reportMissingTypeStubs = false
+reportReturnType = false
+reportUnknownArgumentType = false
+reportUnknownLambdaType = false
+reportUnknownMemberType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
+typeCheckingMode = "strict"
+venv = ".venv"
+venvPath = "."
+
+[tool.pytest]
+ini_options.addopts = "-q"
+ini_options.markers = [
+  "e2e_contract: end-to-end public contract tests",
+  "e2e_behavior: end-to-end behavior tests",
+  "hermetic: marks tests that run fully offline",
+  "vcr: marks tests that use VCR.py for HTTP recording/replay",
+  "slow: marks tests that are slow and should be skipped in fast runs",
+]
+ini_options.pythonpath = [ "src" ]
+
+# ==============================================================================
+# Import Linter Architecture Contracts
+# ==============================================================================
+[tool.importlinter]
+root_packages = [
+  "examples",
+  "py_lib_runtime",
+  "tests",
+]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Root package must not be imported by the private implementation"
+id = "root-not-imported-by-private-implementation"
+type = "forbidden"
+source_modules = [ "py_lib_runtime._internal" ]
+forbidden_modules = [ "py_lib_runtime" ]
+as_packages = false
+
+[[tool.importlinter.contracts]]
+name = "Root package must not be imported by the facade layer"
+id = "root-not-imported-by-facade-layer"
+type = "forbidden"
+source_modules = [ "py_lib_runtime._api" ]
+forbidden_modules = [ "py_lib_runtime" ]
+as_packages = false
+
+[[tool.importlinter.contracts]]
+name = "Private implementation must not depend on public config facade"
+id = "private-implementation-not-dependent-on-config-facade"
+type = "forbidden"
+source_modules = [ "py_lib_runtime._internal" ]
+forbidden_modules = [ "py_lib_runtime._api.config" ]
+as_packages = false
+
+[[tool.importlinter.contracts]]
+name = "Private implementation is only imported through product code and explicit private-boundary test layers"
+id = "private-implementation-approved-boundaries"
+type = "protected"
+protected_modules = [ "py_lib_runtime._internal" ]
+allowed_importers = [
+  "py_lib_runtime._api",
+  "py_lib_runtime._internal",
+  "tests.py_lib_runtime.integration",
+  "tests.py_lib_runtime.property_based.internal",
+  "tests.py_lib_runtime.unit",
+]
+
+[[tool.importlinter.contracts]]
+name = "Facade layer must import private implementation only through the private root"
+id = "facade-private-imports-through-root"
+type = "forbidden"
+source_modules = [ "py_lib_runtime._api" ]
+forbidden_modules = [ "py_lib_runtime._internal.**" ]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Py-lib-runtime public-contract verification modules must not import private implementation"
+id = "py-lib-runtime-public-contract-boundary"
+type = "forbidden"
+source_modules = [
+  "tests.py_lib_runtime.e2e",
+  "tests.py_lib_runtime.property_based.public_contract",
+  "tests.py_lib_runtime.support",
+]
+forbidden_modules = [ "py_lib_runtime._internal", "src" ]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Py-lib-runtime examples must use the public package API"
+id = "py-lib-runtime-examples-public-api"
+type = "forbidden"
+source_modules = [ "examples.py_lib_runtime" ]
+forbidden_modules = [ "py_lib_runtime._api", "py_lib_runtime._internal", "src" ]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Py-lib-runtime shipped package must not import examples"
+id = "py-lib-runtime-shipped-package-examples-boundary"
+type = "forbidden"
+source_modules = [ "py_lib_runtime" ]
+forbidden_modules = [ "examples" ]
+allow_indirect_imports = true
+
+# ==============================================================================
+# Shared py-lib Tooling Manifest
+# ==============================================================================
+[tool.py_lib_starter]
+primary_package = "py_lib_runtime"
+package_names = [ "py_lib_runtime" ]
+library_lane = "standard-lib"
+env_prefix = "PY_LIB_RUNTIME"
+
+# ==============================================================================
+# Release Automation
+# ==============================================================================
+[tool.commitizen]
+name = "cz_conventional_commits"
+version_provider = "pep621"
+version_files = [ "src/py_lib_runtime/__init__.py:__version__" ]
+tag_format = "py-lib-runtime-v$version"
+update_changelog_on_bump = false
+major_version_zero = true
+annotated_tag = true
+allowed_prefixes = [ "Merge", "Revert", "WIP" ]
