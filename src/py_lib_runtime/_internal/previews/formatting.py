@@ -47,7 +47,7 @@ def preview_text(value: str, *, max_chars: int = _MAX_PREVIEW_CHARS) -> str:
     width = _normalize_width(max_chars)
     collapsed = " ".join(value.split())
     if not collapsed:
-        return _EMPTY_PREVIEW
+        return preview_text(_EMPTY_PREVIEW, max_chars=width)
     return shorten(
         collapsed,
         width=width,
@@ -105,5 +105,5 @@ def preview_exception_message(
     """Return a bounded message preview for an exception."""
     message = str(exc).strip()
     if not message:
-        return type(exc).__name__
+        return preview_text(type(exc).__name__, max_chars=max_chars)
     return preview_text(message, max_chars=max_chars)
