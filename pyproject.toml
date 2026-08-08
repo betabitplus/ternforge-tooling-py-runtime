@@ -24,8 +24,15 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Typing :: Typed",
 ]
+<<<<<<< before updating
 dependencies = [ "structlog>=25.5" ]
 optional-dependencies.cache = [ "diskcache>=5.6" ]
+=======
+# --- Main Dependencies ---
+dependencies = [
+  "py-lib-runtime",
+]
+>>>>>>> after updating
 # --- Project URLs ---
 urls."Bug Tracker" = "https://github.com/betabitplus/ternforge-tooling-py-runtime/issues"
 urls.Documentation = "https://github.com/betabitplus/ternforge-tooling-py-runtime/tree/main/docs"
@@ -64,6 +71,12 @@ dev = [
   "pip-audit>=2.10.1",
   "pre-commit>=4.6.0",
   "pyproject-fmt>=2.23.0",
+<<<<<<< before updating
+=======
+  # Shared repo tooling and test support
+  "py-lib-policy",
+  "py-lib-testkit",
+>>>>>>> after updating
   "pyright>=1.1.410",
   # Test runner and plugins
   "pytest>=9.1.0",
@@ -83,6 +96,17 @@ dev = [
   "wheel>=0.47.0",
 ]
 
+<<<<<<< before updating
+=======
+[tool.uv]
+required-version = "==0.12.0"
+
+[tool.uv.sources]
+py-lib-runtime = { git = "https://github.com/betabitplus/ternforge-tooling-py-runtime.git", tag = "v1.1.1" }
+py-lib-policy = { git = "https://github.com/betabitplus/ternforge-tooling-py-policy.git", tag = "v1.1.2" }
+py-lib-testkit = { git = "https://github.com/betabitplus/ternforge-tooling-py-testkit.git", tag = "v1.1.4" }
+
+>>>>>>> after updating
 [tool.setuptools]
 # Package discovery is scoped to `src/`; keep non-package code outside `src/`.
 packages.find.where = [ "src" ]
