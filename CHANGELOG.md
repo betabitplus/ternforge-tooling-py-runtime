@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.1...v1.1.2) (2026-08-08)
+
+
+### Bug Fixes
+
+* keep empty previews bounded ([#14](https://github.com/betabitplus/ternforge-tooling-py-runtime/issues/14)) ([0f6a157](https://github.com/betabitplus/ternforge-tooling-py-runtime/commit/0f6a15740b0cbded563a90ee480afa83cd110c99))
+
 ## [1.1.1](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.0...v1.1.1) (2026-08-08)
 
 
