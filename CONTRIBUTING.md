@@ -22,11 +22,7 @@ reusable implementation files locally.
 
 ## Branch And Target Flow
 
-- Normal development lands on `dev`.
-- Direct pushes to `main` are blocked by a pre-push hook.
-- Branch names must match the enforced local convention: `feature/`, `fix/`,
-  `chore/`, `hotfix/`, `release/`, `codex/`, or the long-lived `dev` / `main`
-  branches.
+Use a topic branch and land changes through a pull request to `main`.
 
 ## Local Validation
 
@@ -125,8 +121,8 @@ direnv exec . uv run python scripts/reproduce_running_loop.py \
 
 ## Commit And Release Conventions
 
-This project uses [Commitizen](https://commitizen-tools.github.io/commitizen/)
-for version management and changelog generation. Commit messages and pull
+Commitizen validates local commit messages. Release Please owns project version,
+changelog, release tags, and release pull requests. Commit messages and pull
 request titles must follow [Conventional Commits](https://www.conventionalcommits.org/)
 format, for example `feat: add retry policy`, `fix(cache): preserve metadata`,
 or `chore(ci): update workflows`. Use GitHub's draft state instead of a `WIP`

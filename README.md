@@ -14,8 +14,6 @@ Package-root verification:
 uv run ruff format --check src tests examples
 uv run ruff check src tests examples
 uv run pyright --project pyproject.toml
-uv run py-lib-check-project-structure --strict-template
-uv run py-lib-check-project-docs-structure
 uv run pytest
 uv build --out-dir "${TMPDIR:-/tmp}/py-lib-runtime-build"
 ```

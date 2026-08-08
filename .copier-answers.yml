@@ -1,4 +1,4 @@
-_commit: v1.2.6
+_commit: v1.2.8
 _src_path: https://github.com/betabitplus/ternforge-template-py-library.git
 author_email: 8123085+betabitplus@users.noreply.github.com
 author_name: betabitplus
@@ -17,7 +17,6 @@ initial_version: 1.0.0
 library_lane: standard-lib
 package_name: py_lib_runtime
 pip_audit_waivers: []
-preserve_pyproject_on_update: true
 project_description: Shared runtime support helpers for Python libraries.
 project_name: py-lib-runtime
 project_slug: py-lib-runtime
