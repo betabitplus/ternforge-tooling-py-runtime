@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    uses: betabitplus/ternforge-infra-ci/.github/workflows/release.yml@088f143a4deb2529126c98691cfbbf04b56bceb8 # v3.0.0
+    uses: betabitplus/ternforge-infra-ci/.github/workflows/release.yml@c66612f01db8fb446c63cd7178a2d22866b215ad # v3.1.0
     with:
       synchronize-python-lock: true
     secrets:
