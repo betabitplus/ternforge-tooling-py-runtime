@@ -117,7 +117,7 @@ def test_root_import_does_not_require_cache_extra() -> None:
 
     env = os.environ.copy()
     env["PYTHONPATH"] = str(package_root / "src")
-    result = subprocess.run(  # noqa: S603
+    result = subprocess.run(
         [sys.executable, "-c", script],
         check=False,
         capture_output=True,

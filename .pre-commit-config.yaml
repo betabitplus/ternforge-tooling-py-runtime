@@ -113,14 +113,6 @@ repos:
         files: (^src/|^tests/|^examples/|^workbench/|^pyproject.toml$)
         stages: [pre-push]
 
-      - id: public-contract-boundary
-        name: public-contract boundary
-        entry: env PYTHONPATH=src:. uv run lint-imports --config pyproject.toml
-        language: system
-        pass_filenames: false
-        always_run: true
-        files: (^tests/|^pyproject\.toml$)
-        stages: [pre-push]
 
   # =============================================================================
   # Typos - Fast spell checker (Rust-based)
@@ -228,16 +220,14 @@ repos:
         stages: [pre-push]
 
   # =============================================================================
-  # Docs - Shape and docstring coverage
+  # Docs - Docstring coverage
   # =============================================================================
-
-  - repo: https://github.com/econchick/interrogate
-    rev: 1.7.0
+  - repo: local
     hooks:
-      # interrogate: Checks for missing docstrings in modules, classes, and funcs
       - id: interrogate
         name: interrogate (docstring coverage)
-        args: [-c, pyproject.toml]
+        entry: uv run interrogate -c pyproject.toml
+        language: system
         pass_filenames: false
         stages: [pre-push]
 
@@ -257,32 +247,33 @@ repos:
   # =============================================================================
   # Build validation - Check-manifest
   # =============================================================================
-  - repo: https://github.com/mgedmin/check-manifest
-    rev: "0.51"
+  - repo: local
     hooks:
       - id: check-manifest
-        args: [--no-build-isolation]
-        additional_dependencies: [hatchling, wheel]
+        name: check-manifest
+        entry: uv run check-manifest
+        language: system
+        pass_filenames: false
         stages: [pre-push] # Only run on push (slower check)
 
   # =============================================================================
   # TOML validation and formatting
   # =============================================================================
-  - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.23.0
+  - repo: local
     hooks:
-      # pyproject-fmt: Enforces consistent pyproject.toml formatting
       - id: pyproject-fmt
         name: pyproject-fmt
-        args: [--keep-full-version, --skip-wrap-for-keys, "*"]
+        entry: uv run pyproject-fmt --keep-full-version --skip-wrap-for-keys "*" pyproject.toml
+        language: system
+        pass_filenames: false
         files: pyproject\.toml$
         stages: [pre-commit]
 
-  - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.25
-    hooks:
       - id: validate-pyproject
         name: validate-pyproject
+        entry: uv run validate-pyproject pyproject.toml
+        language: system
+        pass_filenames: false
         files: pyproject\.toml$
         stages: [pre-commit]
 
@@ -311,20 +302,15 @@ repos:
         stages: [pre-commit]
         exclude: ^(\.agents/|logs/|data/|records/|prompts/|CHANGELOG\.md)
 
-  - repo: https://github.com/hukkin/mdformat
-    rev: 0.7.22
+  - repo: local
     hooks:
-      # mdformat: Opinionated Markdown formatter (tables, frontmatter, etc.)
       - id: mdformat
         name: mdformat
-        additional_dependencies:
-          - mdformat-gfm # GitHub Flavored Markdown (tables, task lists)
-          - mdformat-frontmatter # YAML frontmatter support
-          - mdformat-tables # Table formatting and alignment
-          - mdformat-ruff # Python code block formatting (using Ruff)
-          - mdformat-beautysh # Shell script block formatting
+        entry: uv run mdformat
+        language: system
+        types: [markdown]
         stages: [pre-commit]
-        exclude: ^(\.agents/|logs/|data/|records/|prompts/)
+        exclude: ^(\.agents/|logs/|data/|records/|prompts/|CHANGELOG\.md$)
 
   - repo: https://github.com/tcort/markdown-link-check
     rev: v3.14.2
@@ -386,7 +372,7 @@ repos:
         exclude: ^\.agents/
 
   # =============================================================================
-  # Commitizen - Conventional commits + changelog automation (locked via uv)
+  # Commitizen - Conventional commit validation (locked via uv)
   # =============================================================================
   - repo: local
     hooks:

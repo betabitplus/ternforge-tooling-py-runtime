@@ -25,8 +25,7 @@
   // with Linux binaries. This prevents local macOS runs from breaking after a
   // container build/rebuild. We provision a Linux-specific `.venv` inside the
   // workspace (backed by a named volume).
-  "postCreateCommand": "bash -lc 'sudo chown -R vscode:vscode .venv && (rm -f /home/vscode/.vscode-server/data/User/globalStorage/ms-python.python/pythonLocator/*.json 2>/dev/null || true) && uv venv --python 3.13 --clear .venv && source .venv/bin/activate && bash scripts/env/setup.sh && python -m ensurepip --upgrade --default-pip'",
-  "postStartCommand": "bash -lc '(rm -f /home/vscode/.vscode-server/data/User/globalStorage/ms-python.python/pythonLocator/*.json 2>/dev/null || true)'",
+  "postCreateCommand": "bash -lc 'sudo chown -R vscode:vscode .venv && uv venv --python 3.13 --clear .venv && source .venv/bin/activate && bash scripts/env/setup.sh && python -m ensurepip --upgrade --default-pip'",
   "customizations": {
     "vscode": {
       "settings": {

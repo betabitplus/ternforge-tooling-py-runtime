@@ -31,7 +31,7 @@ _EXAMPLE_SCRIPTS = tuple(
 def test_runtime_example_script_runs(script_path: Path) -> None:
     """Runnable example scripts exit successfully."""
     package_root = _runtime_package_root()
-    result = subprocess.run(  # noqa: S603 - static smoke-test command.
+    result = subprocess.run(
         [sys.executable, script_path.relative_to(package_root).as_posix()],
         cwd=package_root,
         env=_example_env(package_root),
