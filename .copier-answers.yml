@@ -1,4 +1,4 @@
-_commit: v1.3.4
+_commit: v1.3.5
 _src_path: https://github.com/betabitplus/ternforge-template-py-library.git
 author_email: 8123085+betabitplus@users.noreply.github.com
 author_name: betabitplus
@@ -16,13 +16,11 @@ gitignore_extra_patterns: []
 initial_version: 1.0.0
 library_lane: standard-lib
 package_name: py_lib_runtime
-pip_audit_waivers: []
 project_description: Shared runtime support helpers for Python libraries.
 project_name: py-lib-runtime
 project_slug: py-lib-runtime
 project_title: Py Lib Runtime
 project_title_lower: py lib runtime
-renovate_uv_ignored_updates: []
 repository_name: ternforge-tooling-py-runtime
 runtime_audit_exclude_package: ''
 workspace_python_paths:
