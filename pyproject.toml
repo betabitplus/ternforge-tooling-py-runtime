@@ -412,11 +412,6 @@ library_lane = "standard-lib"
 env_prefix = "PY_LIB_RUNTIME"
 secrets.env_files = []
 
-# ---------------- Pip Audit (dependency vulnerability scanning) ----------------
-[tool.pip-audit]
-# Ignore vulnerabilities that are not applicable or have no fix yet.
-ignore-vulns = []
-
 # ---------------- Import-linter architecture contracts ----------------
 [tool.importlinter]
 root_packages = [
