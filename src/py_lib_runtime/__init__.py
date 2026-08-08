@@ -14,6 +14,8 @@ What does not belong here:
 
 from __future__ import annotations
 
+from importlib.metadata import PackageNotFoundError, version
+
 from py_lib_runtime._api.cache import (
     BaseCacheManager,
     cache_from_self_attr,
@@ -61,6 +63,11 @@ from py_lib_runtime._api.validation import (
     validate_positive_int,
 )
 
+try:
+    __version__ = version("py-lib-runtime")
+except PackageNotFoundError:  # pragma: no cover
+    __version__ = "0.0.0+local"
+
 __all__ = [
     "BaseCacheManager",
     "BoundLogger",
@@ -100,5 +107,3 @@ __all__ = [
     "validate_positive_float",
     "validate_positive_int",
 ]
-
-__version__ = "0.2.0"
