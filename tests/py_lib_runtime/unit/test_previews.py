@@ -19,6 +19,7 @@ def test_preview_text_collapses_whitespace_and_limits_width() -> None:
     assert preview_text("  hello\n\nworld  ") == "hello world"
     assert preview_text("alpha beta gamma", max_chars=12) == "alpha..."
     assert preview_text(" \n\t ") == "<empty>"
+    assert preview_text(" \n\t ", max_chars=2) == ".."
     assert preview_text("alpha beta", max_chars=2) == ".."
 
 
@@ -45,4 +46,5 @@ def test_preview_mapping_limits_items_and_values() -> None:
 
 def test_preview_exception_message_uses_type_for_empty_message() -> None:
     assert preview_exception_message(ValueError()) == "ValueError"
+    assert preview_exception_message(ValueError(), max_chars=2) == ".."
     assert preview_exception_message(ValueError("  bad\nvalue  ")) == "bad value"
