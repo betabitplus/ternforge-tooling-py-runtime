@@ -63,12 +63,6 @@ dev = [
   "pillow>=12.2",
   "pip-audit>=2.10.1",
   "pre-commit>=4.6.0",
-<<<<<<< before updating
-=======
-  # Shared repo tooling and test support
-  "py-lib-policy",
-  "py-lib-testkit",
->>>>>>> after updating
   "pyproject-fmt>=2.23.0",
   "pyright>=1.1.410",
   # Test runner and plugins
@@ -100,12 +94,6 @@ package-dir."" = "src"
 
 [tool.uv]
 required-version = "==0.12.0"
-<<<<<<< before updating
-=======
-sources.py-lib-policy = { git = "https://github.com/betabitplus/ternforge-tooling-py-policy.git", tag = "v1.1.2" }
-sources.py-lib-runtime = { git = "https://github.com/betabitplus/ternforge-tooling-py-runtime.git", tag = "v1.1.2" }
-sources.py-lib-testkit = { git = "https://github.com/betabitplus/ternforge-tooling-py-testkit.git", tag = "v1.1.5" }
->>>>>>> after updating
 
 # ---------------- Ruff configuration ----------------
 [tool.ruff]
