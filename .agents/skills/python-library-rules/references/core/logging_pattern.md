@@ -176,7 +176,7 @@ Library modules should only call `get_logger(__name__)`. Configure handlers and
 local log levels only at explicit process boundaries such as demos, workbench
 scripts, e2e direct-module setup, or applications.
 
-Starter-shaped py-lib repos can let shared test/direct-run setup read
+Generated Ternforge Python repos can let shared test/direct-run setup read
 repo-local logging policy from `pyproject.toml`:
 
 ```toml
