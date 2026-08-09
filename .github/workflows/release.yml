@@ -10,8 +10,14 @@ permissions:
 
 jobs:
   release:
-    uses: betabitplus/ternforge-infra-ci/.github/workflows/release.yml@088f143a4deb2529126c98691cfbbf04b56bceb8 # v3.0.0
-    with:
-      synchronize-python-lock: true
-    secrets:
-      app-private-key: ${{ secrets.TERNFORGE_RELEASE_PRIVATE_KEY }}
+    name: release
+    runs-on: ubuntu-slim
+    timeout-minutes: 15
+    environment: release
+    steps:
+      - name: Run release automation
+        uses: betabitplus/ternforge-infra-ci/.github/actions/release@a005c1cb31a77b40c6beeb21e786fc03f42bc576 # v5.0.0
+        with:
+          app-client-id: ${{ vars.TERNFORGE_RELEASE_CLIENT_ID }}
+          app-private-key: ${{ secrets.TERNFORGE_RELEASE_PRIVATE_KEY }}
+          synchronize-python-lock: "true"
