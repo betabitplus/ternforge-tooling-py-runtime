@@ -13,7 +13,7 @@ permissions:
 jobs:
   ci:
     name: ci
-    uses: betabitplus/ternforge-infra-ci/.github/workflows/python-library.yml@c66612f01db8fb446c63cd7178a2d22866b215ad # v3.1.0
+    uses: betabitplus/ternforge-infra-ci/.github/workflows/python-library.yml@784ffb89f7129997b65022adee0f934ea3ff4206 # v4.0.0
     with:
       python-version: "3.13"
       policy-command: ""
