@@ -123,7 +123,7 @@ repos:
       - id: typos
         args: [--config, typos.toml]
         stages: [pre-commit]
-        exclude: ^(\.agents/|tests/.*/__snapshots__/|tests/.*/cassettes/|\.[^/]+/archive/|logs/|data/|records/)
+        exclude: ^(\.agents/|tests/.*/__snapshots__/|tests/.*/cassettes/|\.[^/]+/archive/|logs/|data/|records/|CHANGELOG\.md$)
 
   # =============================================================================
   # Product code complexity analysis
