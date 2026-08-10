@@ -113,6 +113,13 @@ repos:
         files: (^src/|^tests/|^examples/|^workbench/|^pyproject.toml$)
         stages: [pre-push]
 
+      - id: py-lib-policy
+        name: Ternforge policy
+        entry: uv run py-lib-policy check
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
 
   # =============================================================================
   # Typos - Fast spell checker (Rust-based)
