@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.3...v1.1.4) (2026-08-11)
+
+
+### Bug Fixes
+
+* remove migration-era runtime residue ([#39](https://github.com/betabitplus/ternforge-tooling-py-runtime/issues/39)) ([8ee6a3e](https://github.com/betabitplus/ternforge-tooling-py-runtime/commit/8ee6a3e905762c46efd2c257bc1037f1581af596))
+
 ## [1.1.3](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.2...v1.1.3) (2026-08-10)
 
 
