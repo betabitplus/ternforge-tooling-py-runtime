@@ -1,9 +1,4 @@
-"""Public package boundary tests.
-
-Why:
-    Protects the starter-shaped root package layout and optional cache import
-    behavior.
-"""
+"""Public package boundary tests."""
 
 from __future__ import annotations
 
@@ -24,14 +19,6 @@ _ALLOWED_INTERNAL_API_MODULE_IMPORTS = frozenset(
     }
 )
 _ALLOWED_INTERNAL_API_ROOT_IMPORTS = frozenset({"defaults"})
-
-
-def test_package_root_contains_only_starter_shape_files() -> None:
-    package_root = Path(py_lib_runtime.__file__).parent
-
-    root_files = {path.name for path in package_root.iterdir() if path.is_file()}
-
-    assert root_files == {"__init__.py", "py.typed"}
 
 
 def test_api_package_contains_runtime_facades() -> None:

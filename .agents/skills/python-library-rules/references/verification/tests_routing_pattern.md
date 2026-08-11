@@ -32,10 +32,6 @@ package.
 
 Use this layout for the whole `tests/` tree:
 
-- `tests/support/`
-  Legacy cross-project test infrastructure. In Ternforge-managed Python libraries,
-  prefer top-level `py_lib_testkit` helpers instead of creating or mirroring
-  this folder.
 - `tests/<project>/support/`
   Project-specific helpers for one package or service
 - `tests/<project>/e2e/`
