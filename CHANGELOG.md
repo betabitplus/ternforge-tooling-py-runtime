@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.5](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.4...v1.1.5) (2026-08-11)
+
+
+### Bug Fixes
+
+* remove planning protocol compatibility path ([#43](https://github.com/betabitplus/ternforge-tooling-py-runtime/issues/43)) ([c481c5d](https://github.com/betabitplus/ternforge-tooling-py-runtime/commit/c481c5d3daac64b715f16f49bd3c7c29bdcef0f6))
+
 ## [1.1.4](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.3...v1.1.4) (2026-08-11)
 
 
