@@ -29,7 +29,7 @@ fi
 if uv lock --check >/dev/null 2>&1; then
   pass "uv.lock matches pyproject.toml"
 else
-  fail "uv.lock is stale."
+  fail "uv.lock is stale or the installed uv does not match [tool.uv].required-version."
 fi
 config_files="$(py_lib_secret_env_files "$repo_root")" || config_files="__INVALID__"
 if [ "$config_files" = "__INVALID__" ]; then
