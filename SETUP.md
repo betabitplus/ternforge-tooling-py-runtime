@@ -7,7 +7,7 @@ workflow, tests, hooks, and release conventions, use
 ## Prerequisites
 
 - Python 3.13+
-- `uv` installed
+- `uv` matching `[tool.uv].required-version` in `pyproject.toml`
 
 ## First-Time Setup
 
