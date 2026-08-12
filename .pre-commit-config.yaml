@@ -128,7 +128,7 @@ repos:
     rev: v1.47.0
     hooks:
       - id: typos
-        args: [--config, typos.toml]
+        args: [--config, typos.toml, --force-exclude]
         stages: [pre-commit]
         exclude: ^(\.agents/|tests/.*/__snapshots__/|tests/.*/cassettes/|\.[^/]+/archive/|logs/|data/|records/|CHANGELOG\.md$)
 
