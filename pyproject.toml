@@ -408,7 +408,6 @@ allowed_prefixes = [ "Merge", "Revert", "WIP" ]
 [tool.ternforge]
 primary_package = "py_lib_runtime"
 package_names = [ "py_lib_runtime" ]
-library_lane = "standard-lib"
 env_prefix = "PY_LIB_RUNTIME"
 secrets.env_files = []
 
