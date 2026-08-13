@@ -404,6 +404,6 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
-        args: [tests, -n, auto, -p, randomly, -m, "not slow", -q, --no-cov]
+        args: [tests, -n, auto, -m, "not slow", -q, --no-cov]
         files: ^(src/|tests/|examples/)
         stages: [pre-push]
