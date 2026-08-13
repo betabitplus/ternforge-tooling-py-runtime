@@ -13,7 +13,7 @@ permissions:
 jobs:
   ci:
     name: ci
-    uses: betabitplus/ternforge-infra-ci/.github/workflows/python-library.yml@422ba2d28e0e78ac82bd7792f617837ef1d314ac # v5.0.6
+    uses: betabitplus/ternforge-infra-ci/.github/workflows/python-library.yml@6e9126dbe5007166f7fccce6cbddb25ff917f67c # v5.0.7
     with:
       python-version: "3.13"
       runtime-audit-exclude-package: ""
