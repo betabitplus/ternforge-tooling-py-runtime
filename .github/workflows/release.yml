@@ -11,7 +11,7 @@ permissions:
 jobs:
   release:
     name: release
-    runs-on: ubuntu-slim
+    runs-on: ${{ vars.TERNFORGE_RUNNER || 'ubuntu-slim' }}
     timeout-minutes: 15
     environment: release
     steps:
