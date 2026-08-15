@@ -1605,7 +1605,6 @@ cache = [
 [package.dev-dependencies]
 dev = [
     { name = "bandit" },
-    { name = "build" },
     { name = "check-manifest" },
     { name = "check-wheel-contents" },
     { name = "commitizen" },
@@ -1645,7 +1644,6 @@ dev = [
     { name = "ty" },
     { name = "types-pillow" },
     { name = "validate-pyproject" },
-    { name = "wheel" },
 ]
 
 [package.metadata]
@@ -1658,7 +1656,6 @@ provides-extras = ["cache"]
 [package.metadata.requires-dev]
 dev = [
     { name = "bandit", specifier = ">=1.9.4" },
-    { name = "build", specifier = ">=1.5.0" },
     { name = "check-manifest", specifier = ">=0.51" },
     { name = "check-wheel-contents", specifier = ">=0.6.1" },
     { name = "commitizen", specifier = ">=4.16.3" },
@@ -1698,7 +1695,6 @@ dev = [
     { name = "ty", specifier = ">=0.0.50" },
     { name = "types-pillow", specifier = ">=10.2.0.20240822" },
     { name = "validate-pyproject", specifier = ">=0.25" },
-    { name = "wheel", specifier = ">=0.47.0" },
 ]
 
 [[package]]
@@ -2509,18 +2505,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/34/74/c6428f875774288bec1396f5bfcbc2d925700a4dad61727fd5f2b12f249d/wcwidth-0.8.2.tar.gz", hash = "sha256:91fbef97204b96a3d4d421609b80340b760cf33e26da123ff243d76b1fda8dda", size = 1466253, upload-time = "2026-06-29T18:11:11.601Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/96/42/3e5985a0a7e57de470b320c6d6a1a67c844f6737a587f3d44dd13d1819e7/wcwidth-0.8.2-py3-none-any.whl", hash = "sha256:d63947694a0539a1d51e01eda7caf800c291020e6cdd7e28ad7b14dd33ad4f85", size = 323166, upload-time = "2026-06-29T18:11:09.888Z" },
-]
-
-[[package]]
-name = "wheel"
-version = "0.47.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "packaging" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/39/62/75f18a0f03b4219c456652c7780e4d749b929eb605c098ce3a5b6b6bc081/wheel-0.47.0.tar.gz", hash = "sha256:cc72bd1009ba0cf63922e28f94d9d83b920aa2bb28f798a31d0691b02fa3c9b3", size = 63854, upload-time = "2026-04-22T15:51:27.727Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/87/1b/9e33c09813d65e248f7f773119148a612516a4bea93e9c6f545f78455b7c/wheel-0.47.0-py3-none-any.whl", hash = "sha256:212281cab4dff978f6cedd499cd893e1f620791ca6ff7107cf270781e587eced", size = 32218, upload-time = "2026-04-22T15:51:26.296Z" },
 ]
 
 [[package]]
