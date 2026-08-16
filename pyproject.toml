@@ -24,8 +24,13 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Typing :: Typed",
 ]
+<<<<<<< before updating
 dependencies = [ "structlog>=25.5" ]
 optional-dependencies.cache = [ "diskcache>=5.6" ]
+=======
+# --- Main Dependencies ---
+dependencies = []
+>>>>>>> after updating
 # --- Project URLs ---
 urls."Bug Tracker" = "https://github.com/betabitplus/ternforge-tooling-py-runtime/issues"
 urls.Documentation = "https://github.com/betabitplus/ternforge-tooling-py-runtime/tree/main/docs"
@@ -93,10 +98,10 @@ packages.find.include = [ "py_lib_runtime*" ]
 package-dir."" = "src"
 
 [tool.uv]
-required-version = "==0.12.3"
-sources.py-lib-policy = { git = "https://github.com/betabitplus/ternforge-tooling-py-policy.git", tag = "v1.1.8" }
-sources.py-lib-runtime = { git = "https://github.com/betabitplus/ternforge-tooling-py-runtime.git", tag = "v1.1.5" }
-sources.py-lib-testkit = { git = "https://github.com/betabitplus/ternforge-tooling-py-testkit.git", tag = "v2.0.0" }
+required-version = "==0.12.5"
+sources.py-lib-policy = { git = "https://github.com/betabitplus/ternforge-tooling-py-policy.git", tag = "v1.1.10" }
+sources.py-lib-runtime = { git = "https://github.com/betabitplus/ternforge-tooling-py-runtime.git", tag = "v1.1.6" }
+sources.py-lib-testkit = { git = "https://github.com/betabitplus/ternforge-tooling-py-testkit.git", tag = "v2.0.2" }
 
 # ---------------- Ruff configuration ----------------
 [tool.ruff]
