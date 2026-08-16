@@ -1583,8 +1583,8 @@ wheels = [
 
 [[package]]
 name = "py-lib-policy"
-version = "1.1.8"
-source = { git = "https://github.com/betabitplus/ternforge-tooling-py-policy.git?tag=v1.1.8#eed0460cdc91842024a221402f2929a22e659453" }
+version = "1.1.10"
+source = { git = "https://github.com/betabitplus/ternforge-tooling-py-policy.git?tag=v1.1.10#8acb1774a1162eac8293a04d7968a0284803dbdc" }
 dependencies = [
     { name = "pyyaml" },
 ]
@@ -1679,7 +1679,7 @@ dev = [
     { name = "pillow", specifier = ">=12.2" },
     { name = "pip-audit", specifier = ">=2.10.1" },
     { name = "pre-commit", specifier = ">=4.6.0" },
-    { name = "py-lib-policy", git = "https://github.com/betabitplus/ternforge-tooling-py-policy.git?tag=v1.1.8" },
+    { name = "py-lib-policy", git = "https://github.com/betabitplus/ternforge-tooling-py-policy.git?tag=v1.1.10" },
     { name = "pyproject-fmt", specifier = ">=2.23.0" },
     { name = "pyright", specifier = ">=1.1.410" },
     { name = "pytest", specifier = ">=9.1.0" },
