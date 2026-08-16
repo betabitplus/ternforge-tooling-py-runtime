@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.6](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.5...v1.1.6) (2026-08-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency betabitplus/ternforge-infra-updates to v0.2.5 ([#45](https://github.com/betabitplus/ternforge-tooling-py-runtime/issues/45)) ([0acab3b](https://github.com/betabitplus/ternforge-tooling-py-runtime/commit/0acab3b7e5f9f04f229721f7dffd56c5919060d7))
+* support private source repositories ([#54](https://github.com/betabitplus/ternforge-tooling-py-runtime/issues/54)) ([ea8a4d3](https://github.com/betabitplus/ternforge-tooling-py-runtime/commit/ea8a4d31ed1f353320c575f7bf43c3a1bd741146))
+
 ## [1.1.5](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.4...v1.1.5) (2026-08-11)
 
 
