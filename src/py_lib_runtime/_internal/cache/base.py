@@ -86,6 +86,20 @@ class BaseCacheManager[T](ABC):
             cache_dir=str(self._cache_dir),
         )
 
+    def __enter__(self) -> BaseCacheManager[T]:
+        """Context manager entry."""
+        return self
+
+    def __exit__(self, *args: object) -> None:
+        """Context manager exit."""
+        _ = args
+        self.close()
+
+    def __del__(self) -> None:
+        """Best-effort cleanup for abandoned cache managers."""
+        with suppress(Exception):
+            self.close()
+
     def delete(self, key: str, params: Mapping[str, Any] | None = None) -> bool:
         """Remove a cached entry for a key."""
         if self._cache is None:
@@ -272,20 +286,6 @@ class BaseCacheManager[T](ABC):
                 "Cache closed",
                 event_type="py_lib_runtime.cache.lifecycle.closed",
             )
-
-    def __enter__(self) -> BaseCacheManager[T]:
-        """Context manager entry."""
-        return self
-
-    def __exit__(self, *args: object) -> None:
-        """Context manager exit."""
-        _ = args
-        self.close()
-
-    def __del__(self) -> None:
-        """Best-effort cleanup for abandoned cache managers."""
-        with suppress(Exception):
-            self.close()
 
     @abstractmethod
     def _serialize_entry(self, entry: T) -> _CachePayload:
