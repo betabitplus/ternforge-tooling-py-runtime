@@ -1,4 +1,3 @@
-# %%
 """Runnable examples smoke tests.
 
 Why:
@@ -15,10 +14,7 @@ from pathlib import Path
 
 import pytest
 
-pytestmark = [
-    pytest.mark.e2e_behavior,
-    pytest.mark.hermetic,
-]
+pytestmark = [pytest.mark.hermetic]
 
 _PACKAGE_ROOT = Path(__file__).resolve().parents[4]
 _EXAMPLES_ROOT = _PACKAGE_ROOT / "examples" / "py_lib_runtime"

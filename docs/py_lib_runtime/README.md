@@ -13,7 +13,6 @@ These docs describe the shared runtime helper package.
 - [architecture/README.md](architecture/README.md)
 - [dependencies.md](dependencies.md)
 - [usage.md](usage.md)
-- [verification/README.md](verification/README.md)
 
 ## 1.2 Feature Docs
 

@@ -1,4 +1,3 @@
-# %%
 """Py-lib-runtime public config boundary scenario.
 
 Why:
@@ -14,13 +13,6 @@ Checks:
     If a caller installs a runtime config from the supported package boundary,
     then subsequent public reads return the installed immutable snapshot.
 
-Examples:
-    Run manually:
-        uv run python -m \
-            tests.py_lib_runtime.e2e.public_boundary.test_public_config_pipeline
-
-    Run as test:
-        pytest tests/py_lib_runtime/e2e/public_boundary/test_public_config_pipeline.py
 """
 
 from __future__ import annotations
@@ -31,10 +23,7 @@ import pytest
 
 from py_lib_runtime import PyLibRuntimeConfig, get_config, install_config
 
-pytestmark = [
-    pytest.mark.e2e_contract,
-    pytest.mark.hermetic,
-]
+pytestmark = [pytest.mark.hermetic]
 
 
 @pytest.fixture(autouse=True)
@@ -77,20 +66,3 @@ def test_public_config_pipeline() -> None:
     config = run_pipeline()
 
     assert_public_config_response(config)
-
-
-# =============================================================================
-# Demo (Manual Execution)
-# =============================================================================
-
-
-def main() -> None:
-    """Run the public config boundary scenario as a manual demo."""
-    config = run_pipeline()
-    assert_public_config_response(config)
-
-
-if __name__ == "__main__":
-    main()
-
-# %%
