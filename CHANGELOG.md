@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.7](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.6...v1.1.7) (2026-08-26)
+
+
+### Bug Fixes
+
+* apply lean template baseline ([#82](https://github.com/betabitplus/ternforge-tooling-py-runtime/issues/82)) ([3ef6c48](https://github.com/betabitplus/ternforge-tooling-py-runtime/commit/3ef6c489acb8a7510836994e68b82fcd06a1a262))
+
 ## [1.1.6](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.5...v1.1.6) (2026-08-16)
 
 
