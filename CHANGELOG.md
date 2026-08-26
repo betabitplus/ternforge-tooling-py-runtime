@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.8](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.7...v1.1.8) (2026-08-26)
+
+
+### Bug Fixes
+
+* clean verification reference index ([#86](https://github.com/betabitplus/ternforge-tooling-py-runtime/issues/86)) ([aab2690](https://github.com/betabitplus/ternforge-tooling-py-runtime/commit/aab26904de0ed8b394163bc8e388bf14c2421bf3))
+
 ## [1.1.7](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.6...v1.1.7) (2026-08-26)
 
 
