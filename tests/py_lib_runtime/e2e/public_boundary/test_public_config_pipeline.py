@@ -31,10 +31,7 @@ import pytest
 
 from py_lib_runtime import PyLibRuntimeConfig, get_config, install_config
 
-pytestmark = [
-    pytest.mark.e2e_contract,
-    pytest.mark.hermetic,
-]
+pytestmark = [pytest.mark.hermetic]
 
 
 @pytest.fixture(autouse=True)
