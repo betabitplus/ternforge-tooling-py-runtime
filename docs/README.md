@@ -13,4 +13,4 @@ These docs describe the shared runtime helper package.
 ## Files
 
 - [Package Docs](py_lib_runtime/README.md)
-  Indexes runtime architecture, usage, dependency, and verification docs.
+  Indexes runtime architecture, usage, and dependency docs.

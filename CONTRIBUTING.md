@@ -5,9 +5,7 @@ local environment feels off, run `bash scripts/env/doctor.sh` before debugging
 deeper.
 
 Use [docs/py_lib_runtime/README.md](docs/py_lib_runtime/README.md) for package
-docs, [tests/README.md](tests/README.md) for test-tree layout, and
-[docs/py_lib_runtime/verification/README.md](docs/py_lib_runtime/verification/README.md)
-for verification guidance.
+docs and [tests/README.md](tests/README.md) for test-tree layout.
 
 Repository-wide package and reusable-zone checks read metadata from
 `[tool.ternforge]` in `pyproject.toml`. When repo-local scripts or shared
@@ -98,7 +96,7 @@ needs private modules, move that investigation to `workbench/` or convert it
 into a test.
 
 Every committed example should have a matching link from the package usage docs.
-The e2e examples smoke test discovers and runs committed example scripts so
+The examples smoke test discovers and runs committed example scripts so
 docs examples do not drift silently.
 
 ## Live Workbench Scripts

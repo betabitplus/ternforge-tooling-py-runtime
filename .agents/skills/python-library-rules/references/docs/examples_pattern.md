@@ -14,8 +14,9 @@ Keep examples live: when a workflow depends on providers, credentials, files, or
 services, direct execution uses the real dependency. Do not replace live behavior with
 mocks, recordings, replay fixtures, canned responses, or example-only stubs.
 
-Put exhaustive provider permutations, failure paths, retries, and behavioral matrices in
-tests/e2e rather than multiplying user examples.
+Put exhaustive provider permutations, failure paths, retries, and technical matrices in
+unit/integration/property-based tests. Keep Living Specifications representative of the
+durable human-readable contract rather than multiplying user examples.
 
 ## Execution Boundary
 
@@ -31,6 +32,9 @@ policy requirement.
 
 Sphinx-Gallery renders the same Python source into HTML, captured output, downloadable Python,
 and Jupyter notebooks. Do not duplicate complete walkthrough code in a parallel `usage.md`.
+Prefer a real generated figure for the thumbnail. For non-visual examples that need a curated
+thumbnail, use a committed per-example `sphinx_gallery_thumbnail_path`; do not add a global
+custom fallback only to fill empty gallery cards.
 
 Required CI may lint, type-check, import, and build the gallery with live execution disabled.
 Full live execution stays explicit and uses the developer's configured environment.
