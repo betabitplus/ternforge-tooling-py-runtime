@@ -1,4 +1,3 @@
-# %%
 """Runnable examples smoke tests.
 
 Why:
