@@ -56,4 +56,4 @@ timeout = validate_positive_float(field_name="timeout", value=0.5)
 ## 1.4 Runnable Examples
 
 - [validation_demo.py](../../examples/py_lib_runtime/validation_demo.py)
-  Run with: `uv run python packages/py-lib-runtime/examples/py_lib_runtime/validation_demo.py`
+  Run with: `uv run python examples/py_lib_runtime/validation_demo.py`

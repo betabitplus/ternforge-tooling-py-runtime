@@ -91,4 +91,4 @@ class PageClient:
 ## 1.4 Runnable Examples
 
 - [cache_demo.py](../../examples/py_lib_runtime/cache_demo.py)
-  Run with: `uv run python packages/py-lib-runtime/examples/py_lib_runtime/cache_demo.py`
+  Run with: `uv run python examples/py_lib_runtime/cache_demo.py`

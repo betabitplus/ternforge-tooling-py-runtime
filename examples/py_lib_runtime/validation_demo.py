@@ -1,9 +1,10 @@
-# %%
-"""Runnable numeric validation helper examples.
+"""Numeric validation helpers
+==========================
 
-Run from the repository root:
-    uv run python packages/py-lib-runtime/examples/py_lib_runtime/validation_demo.py
+Runnable examples for the public numeric-validation helpers.
 """
+
+# %%
 
 from __future__ import annotations
 

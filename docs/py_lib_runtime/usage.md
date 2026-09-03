@@ -20,4 +20,4 @@ The runtime package exposes small shared helper families through the
 
 ## Runnable Examples
 
-Runnable examples live in [examples/py_lib_runtime](../../examples/py_lib_runtime).
+Runnable examples are published in {doc}`the executable examples gallery </auto_examples/index>`.
