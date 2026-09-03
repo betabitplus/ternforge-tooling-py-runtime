@@ -51,7 +51,7 @@ uvx --from copier==9.17.2 copier update
 ```
 
 The update command leaves product-owned `src/`, `tests/`, `docs/`,
-`examples/`, and `workbench/` files alone by default. Review the resulting
+`examples/`, and `experiments/` files alone by default. Review the resulting
 diff, run validation, then land the update through the normal pull request to `main`.
 
 ## Running Tests
@@ -92,30 +92,31 @@ direnv exec . uv run python examples/py_lib_runtime/<module>.py
 ```
 
 Keep examples focused on imports from `py_lib_runtime`. If an example
-needs private modules, move that investigation to `workbench/` or convert it
-into a test.
+needs private modules, convert that behavior into a test or keep the investigation
+temporary; a retained Engineering Experiment must stay independent of the shipped
+package.
 
 Every committed example should have a matching link from the package usage docs.
 The examples smoke test discovers and runs committed example scripts so
 docs examples do not drift silently.
 
-## Live Workbench Scripts
+## Engineering Experiments
 
-`workbench/` is manual-only. Add focused probes there when a behavior needs
-live investigation outside committed pytest coverage.
+`experiments/` is optional and contains durable investigations, not another test
+suite or a home for ad-hoc scripts. Preserve an investigation only when its exact
+inputs, executable method, environment, and captured result are useful engineering
+knowledge.
 
-Run a probe directly:
+Each retained experiment is a self-contained capsule under
+`experiments/<project>/exp_####_<slug>/` with `src/experiment.py`, one captured
+`report/report.ipynb`, its own `pyproject.toml`, `uv.lock`, and `.python-version`,
+plus causal `inputs/` and optional retained `artifacts/` when needed.
 
-```bash
-direnv exec . uv run python -m workbench.py_lib_runtime.<module>
-```
-
-Reproduce the same probe inside an already-running event loop:
-
-```bash
-direnv exec . uv run python scripts/reproduce_running_loop.py \
-    workbench.py_lib_runtime.<module>
-```
+Capsules are standalone uv projects. They must not import the parent package,
+repository `src/` or `tests/`, sibling experiments, or shared experiment helpers,
+and they must not use local/workspace/editable dependencies. `py-lib-policy`
+enforces these reusable structural boundaries. Project-specific capture, report,
+and documentation tooling may add stricter rules locally.
 
 ## Commit And Release Conventions
 
