@@ -1,9 +1,10 @@
-# %%
-"""Runnable preview helper examples.
+"""Preview helpers
+===============
 
-Run from the repository root:
-    uv run python packages/py-lib-runtime/examples/py_lib_runtime/previews_demo.py
+Runnable examples for the public preview-formatting helpers.
 """
+
+# %%
 
 from __future__ import annotations
 

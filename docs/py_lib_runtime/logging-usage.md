@@ -10,11 +10,11 @@ description: Structlog and stdlib logging helpers exported by py_lib_runtime.
 
 `logging` gives generated libraries one shared structlog/stdlib setup.
 
-Use it for package logging setup in local scripts or workbench runs, safe library loggers, duration events, and tenacity-style retry events.
+Use it for package logging setup in local diagnostic scripts, safe library loggers, duration events, and tenacity-style retry events.
 
 ## 1.2 Features
 
-- Provides a unified `configure_package_logging` for standalone script and workbench runs.
+- Provides a unified `configure_package_logging` for standalone diagnostic scripts.
 - Derives log levels and JSON formatting toggles automatically from environment variables.
 - Exports a safe `get_logger()` that routes default structlog output through stdlib and adds a null handler.
 - Provides a context manager for tracking operation durations (`duration_ms`).
@@ -24,7 +24,7 @@ Use it for package logging setup in local scripts or workbench runs, safe librar
 
 ### 1.3.1 Setting Up Package Logging
 
-For local runs, scripts, or workbenches where the library acts as the main application.
+For local diagnostic scripts where the library acts as the main application.
 
 ```python
 from py_lib_runtime import configure_package_logging
@@ -94,4 +94,4 @@ def run():
 ## 1.4 Runnable Examples
 
 - [logging_demo.py](../../examples/py_lib_runtime/logging_demo.py)
-  Run with: `uv run python packages/py-lib-runtime/examples/py_lib_runtime/logging_demo.py`
+  Run with: `uv run python examples/py_lib_runtime/logging_demo.py`

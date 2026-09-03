@@ -42,7 +42,7 @@ Use shared smoke commands directly:
 
 ```bash
 uv build
-uv run pytest tests/py_lib_runtime/e2e/public_boundary -q --no-cov
+uv run pytest tests/py_lib_runtime/integration/test_public_config_boundary.py -q --no-cov
 ```
 
 Check and apply released Ternforge template updates with Copier:
@@ -57,10 +57,4 @@ Run structural and artifact checks directly when needed:
 ```bash
 uv run py-lib-policy .
 uv build
-```
-
-Use the running-loop diagnostic helper only for real workbench modules:
-
-```bash
-uv run python scripts/reproduce_running_loop.py workbench.py_lib_runtime.<module>
 ```

@@ -1,9 +1,10 @@
-# %%
-"""Runnable persistent cache helper examples.
+"""Persistent cache helpers
+========================
 
-Run from the repository root:
-    uv run python packages/py-lib-runtime/examples/py_lib_runtime/cache_demo.py
+Runnable examples for the public persistent-cache helpers.
 """
+
+# %%
 
 from __future__ import annotations
 
