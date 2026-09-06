@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.2.0...v1.2.1) (2026-09-06)
+
+
+### Bug Fixes
+
+* complete DocOps cleanup ([#96](https://github.com/betabitplus/ternforge-tooling-py-runtime/issues/96)) ([6a6b981](https://github.com/betabitplus/ternforge-tooling-py-runtime/commit/6a6b9811bf75c7af679b98c59382ecacdbb39484))
+
 ## [1.2.0](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.1.7...v1.2.0) (2026-09-03)
 
 
