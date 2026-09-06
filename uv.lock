@@ -2474,7 +2474,7 @@ source = { git = "https://github.com/betabitplus/ternforge-tooling-py-policy.git
 
 [[package]]
 name = "py-lib-runtime"
-version = "1.2.0"
+version = "1.2.1"
 source = { editable = "." }
 dependencies = [
     { name = "structlog" },
