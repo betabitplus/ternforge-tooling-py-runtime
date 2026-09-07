@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.2.1...v1.2.2) (2026-09-07)
+
+
+### Bug Fixes
+
+* finish template metadata cleanup ([#98](https://github.com/betabitplus/ternforge-tooling-py-runtime/issues/98)) ([821ab8d](https://github.com/betabitplus/ternforge-tooling-py-runtime/commit/821ab8de65e367dff40c3f905be6c06302f5ed15))
+
 ## [1.2.1](https://github.com/betabitplus/ternforge-tooling-py-runtime/compare/v1.2.0...v1.2.1) (2026-09-06)
 
 
